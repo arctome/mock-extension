@@ -1,5 +1,5 @@
 Vue.component("MockItem", {
-    template: `
+  template: `
       <li style="list-style:none;">
         <sui-segment style="display: flex;justify-content:space-between;align-items:center;">
           <div>
@@ -13,24 +13,26 @@ Vue.component("MockItem", {
         </sui-segment>
       </li>
     `,
-    name: "MockItem",
-    data() {
-      return {}
-    },
-    props: ["info"],
-    methods: {
-      enableToggler(bool) {
-        // console.log(this.info.id);
-        window.localStorage.setItem(this.info.id, bool);
-      }
-    },
-    mounted() {
-      // var a = window.localStorage.getItem(this.info.id);
-      // console.log(a);
+  name: "MockItem",
+  data() {
+    return {}
+  },
+  props: ["info"],
+  methods: {
+    enableToggler(bool) {
+      var oldRec = window.localStorage.getItem(this.info.id);
+      oldRec = JSON.parse(oldRec);
+      oldRec.enable = bool;
+      window.localStorage.setItem(this.info.id, JSON.stringify(oldRec));
     }
-  })
-  Vue.component("StatusBar", {
-    template: `
+  },
+  mounted() {
+    // var a = window.localStorage.getItem(this.info.id);
+    // console.log(a);
+  }
+})
+Vue.component("StatusBar", {
+  template: `
       <div>
         <div style="display: flex; align-items: center; justify-content: space-between">
           <div><sui-button content="Pause" negative icon="pause" label-position="left" v-if="mockFlag" @click="toggleMockHandler(!mockFlag)" />
@@ -43,44 +45,44 @@ Vue.component("MockItem", {
         </ul>
       </div>
     `,
-    name: "StatusBar",
-    data() {
-      return {
-        mockFlag: false,
-        recordList: [
-          // {id: 123, url: "https://mock.arcto.xyz"}
-        ]
-      }
-    },
-    mounted() {
-      const _this = this;
-      this.mockFlag = window.localStorage.getItem(window.__ext__VARS.LOCAL_STORAGE_MOCKFLAG) === "true";
-      allHistoryIterate(function(key, value) {
-        _this.recordList.push({...value, id: key});
-      })
-    },
-    methods: {
-      toggleMockHandler(bool) {
-        window.localStorage.setItem(window.__ext__VARS.LOCAL_STORAGE_MOCKFLAG, bool);
-        this.mockFlag = bool;
-      }
+  name: "StatusBar",
+  data() {
+    return {
+      mockFlag: false,
+      recordList: [
+        // {id: 123, url: "https://mock.arcto.xyz"}
+      ]
     }
-  })
-  const App = {
-    template: `<div><status-bar /></div>`,
-    name: "App",
-    data() {
-      return {
-        
-      };
-    },
-    methods: {
-      
-    },
-  };
-  Vue.config.productionTip = false;
-    Vue.use(SemanticUIVue);
+  },
+  mounted() {
+    const _this = this;
+    this.mockFlag = window.localStorage.getItem(window.__ext__VARS.LOCAL_STORAGE_MOCKFLAG) === "true";
+    allHistoryIterate(function (key, value) {
+      _this.recordList.push({ ...value, id: key });
+    })
+  },
+  methods: {
+    toggleMockHandler(bool) {
+      window.localStorage.setItem(window.__ext__VARS.LOCAL_STORAGE_MOCKFLAG, bool);
+      this.mockFlag = bool;
+    }
+  }
+})
+const App = {
+  template: `<div><status-bar /></div>`,
+  name: "App",
+  data() {
+    return {
 
-    new Vue({
-      render: (h) => h(App),
-    }).$mount("#app");
+    };
+  },
+  methods: {
+
+  },
+};
+Vue.config.productionTip = false;
+Vue.use(SemanticUIVue);
+
+new Vue({
+  render: (h) => h(App),
+}).$mount("#app");

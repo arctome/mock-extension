@@ -31,13 +31,15 @@ function apiDataParse(info) {
     localSettings = JSON.parse(localSettings);
     const param = localSettings.ajax_param || "ajaxID";
     const id = infoURL.searchParams.get(param); // √
-    let storeInfo = {
-        enable: false,
-        url: infoURL.href,
-        id
+    if(id) {
+        let storeInfo = {
+            enable: false,
+            url: infoURL.href,
+            id
+        }
+        localStorage.setItem(id, JSON.stringify(storeInfo))
+        console.log(storeInfo)
     }
-    localStorage.setItem(id, JSON.stringify(storeInfo))
-    return storeInfo
 }
 
 function xhrRedirect(info) {
@@ -58,7 +60,7 @@ function xhrRedirect(info) {
 }
 
 function getMockStatus() {
-    return localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_MOCKFLAG) === false || localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_MOCKFLAG) === "false";
+    return localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_MOCKFLAG) === true || localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_MOCKFLAG) === "true";
 }
 
 chrome.webRequest.onBeforeRequest.addListener(
