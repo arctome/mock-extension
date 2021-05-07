@@ -17,5 +17,6 @@
   "page_action": {
     "default_popup": "popup.html"
   },
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "content_security_policy": "script-src 'self' blob: filesystem: chrome-extension-resource: 'unsafe-eval'"
 }
