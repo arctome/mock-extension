@@ -87,7 +87,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function (info) {
     if (!ajaxId) return;
     let headers = info.requestHeaders
     // Add private token
-    headers.push({ name: "Arcto-Mock-Token", value: localStorage.getItem(LOCAL_STORAGE_KEYNAME) })
+    headers.push({ name: "Arcto-Mock-Token", value: localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_KEYNAME) })
     return { requestHeaders: headers }
 },
     { urls: ["<all_urls>"] },
