@@ -54,7 +54,7 @@ function xhrRedirect(info) {
         let record = JSON.parse(localStorage.getItem(ajaxId));
         if (record.enable === false || record.enable === "false") return;
         return {
-            redirectUrl: REMOTE_MOCK_SERVER + ajaxId
+            redirectUrl: BG_GLOBAL.REMOTE_MOCK_SERVER + ajaxId
         }
     }
 }

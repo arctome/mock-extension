@@ -5,7 +5,7 @@ Vue.component("MockItem", {
           <div>
             <p style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><strong>Mock ID: </strong>{{ info.id }}</p>
             <strong>URL: </strong>
-            <p style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:-webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;word-break: break-all;">{{ info.url }}</p>
+            <p style="max-width:300px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;word-break: break-all;">{{ info.url }}</p>
           </div>
           <div>
             <sui-checkbox toggle v-model="info.enable" name="enable" @change="enableToggler" />
