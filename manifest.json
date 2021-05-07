@@ -1,0 +1,21 @@
+{
+  "name": "Arcto's Mock",
+  "version": "0.1",
+  "description": "Arcto's Extension, which is an useful tool for Ajax api mock, without overwrite your `XMLHttpRequest`! ",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "permissions": [
+    "<all_urls>",
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "tabs"
+  ],
+  "page_action": {
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html"
+}
