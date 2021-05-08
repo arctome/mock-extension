@@ -83,6 +83,8 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.webRequest.onBeforeSendHeaders.addListener(function (info) {
     if (!getMockStatus()) return;
+    const useOnline = localSettings.online === "on";
+    if(!useOnline) return; // If user use custom service, ignore header pass.
     if (!info.type === "xmlhttprequest") return;
     const ajaxId = new URL(info.url).searchParams.get('mock_redirected_id');
     if (!ajaxId) return;
