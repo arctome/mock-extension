@@ -38,7 +38,6 @@ function apiDataParse(info) {
             id
         }
         localStorage.setItem(id, JSON.stringify(storeInfo))
-        console.log(storeInfo)
     }
 }
 
@@ -46,6 +45,8 @@ function xhrRedirect(info) {
     let localSettings = window.localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_SETTINGNAME);
     localSettings = JSON.parse(localSettings);
     const param = localSettings.ajax_param || "ajaxID";
+    const useOnline = localSettings.online === "on";
+    const apiurl = useOnline ? BG_GLOBAL.REMOTE_MOCK_SERVER : localSettings.apiurl;
     let ajaxId = new URL(info.url).searchParams.get(param) || '';
     if (ajaxId) {
         if (!localStorage.getItem(ajaxId)) {
@@ -54,7 +55,7 @@ function xhrRedirect(info) {
         let record = JSON.parse(localStorage.getItem(ajaxId));
         if (record.enable === false || record.enable === "false") return;
         return {
-            redirectUrl: BG_GLOBAL.REMOTE_MOCK_SERVER + ajaxId
+            redirectUrl: apiurl + ajaxId
         }
     }
 }

@@ -44,7 +44,14 @@ Vue.component("LegacySettingEditor", {
       </sui-form-field>
       <sui-form-field inline :disabled="!enable">
         <label>Ajax Parameter: </label>
-        <input type="text" placeholder="ajaxID" name="ajax_param" :value="ajax_param" />
+        <input type="text" placeholder="ajaxID" name="ajax_param" v-model="ajax_param" />
+      </sui-form-field>
+      <sui-form-field>
+        <sui-checkbox toggle label="Use [mock.arcto.xyz] online service?" v-model="online" name="online" @change="onlineToggler" />
+      </sui-form-field>
+      <sui-form-field inline v-if="!online">
+        <label>API Url: </label>
+        <input type="text" placeholder="https://mock.arcto.xyz/mock" name="apiurl" v-model="apiurl" style="min-width: 400px;" />
       </sui-form-field>
       <sui-button :content="saveStatus ? 'Saved!' : 'Save'" type="submit" primary :positive="saveStatus" />
     </sui-form>`,
@@ -53,13 +60,16 @@ Vue.component("LegacySettingEditor", {
         return {
             saveStatus: false,
             enable: false,
-            ajax_param: ""
+            ajax_param: "",
+            apiurl: "",
+            online: true
         };
     },
     mounted() {
         let data = window.localStorage.getItem(window.__ext__VARS.LOCAL_STORAGE_SETTINGNAME);
         data = JSON.parse(data || "{}");
         this.ajax_param = data.ajax_param || "ajaxID";
+        this.online = data.online === "on";
         this.enable = data.enable === "on";
     },
     methods: {
@@ -70,6 +80,12 @@ Vue.component("LegacySettingEditor", {
             for (let pair of form.entries()) {
                 json[pair[0]] = pair[1];
             }
+            // valid
+            if(json.online !== "on" && !json.apiurl) {
+                alert("API Url cannot be empty if you use offline service! ");
+                return;
+            }
+
             window.localStorage.setItem(window.__ext__VARS.LOCAL_STORAGE_SETTINGNAME, JSON.stringify(json));
             this.saveStatus = true;
             setTimeout(() => {
@@ -78,6 +94,9 @@ Vue.component("LegacySettingEditor", {
         },
         enableToggler(bool) {
             this.enable = bool;
+        },
+        onlineToggler(bool) {
+            this.online = bool;
         }
     },
 });

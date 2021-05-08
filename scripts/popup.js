@@ -42,7 +42,7 @@ Vue.component("StatusBar", {
           </sui-button-group>
           <sui-button content="Edit or Create" icon="external alternate right" label-position="right" @click="window.open('https://mock.arcto.xyz/dashboard')" />
         </div>
-        <sui-divider horizontal>Captured Request with Param</sui-divider>
+        <sui-divider horizontal>Captured Requests</sui-divider>
         <ul style="padding: 0">
           <mock-item v-for="item in recordList" :info="item" :key="item.id"></mock-item>
         </ul>
