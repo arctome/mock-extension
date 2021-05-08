@@ -70,6 +70,9 @@ Vue.component("LegacySettingEditor", {
         data = JSON.parse(data || "{}");
         this.ajax_param = data.ajax_param || "ajaxID";
         this.online = data.online === "on";
+        if(!this.online) {
+            this.apiurl = data.apiurl;
+        }
         this.enable = data.enable === "on";
     },
     methods: {

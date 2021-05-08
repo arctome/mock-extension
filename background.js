@@ -83,6 +83,8 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.webRequest.onBeforeSendHeaders.addListener(function (info) {
     if (!getMockStatus()) return;
+    let localSettings = window.localStorage.getItem(BG_GLOBAL.LOCAL_STORAGE_SETTINGNAME);
+    localSettings = JSON.parse(localSettings);
     const useOnline = localSettings.online === "on";
     if(!useOnline) return; // If user use custom service, ignore header pass.
     if (!info.type === "xmlhttprequest") return;
