@@ -3,20 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="https://disk.arcto.xyz/g/h9z3b6cvwm/favicon.ico?t=46c_lb">
+    <link
+      rel="shortcut icon"
+      href="https://disk.arcto.xyz/g/h9z3b6cvwm/favicon.ico?t=46c_lb"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./lib/vue.min.js"></script>
     <script src="./lib/semantic-ui-vue.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="./lib/semantic.min.css"
-    />
+    <link rel="stylesheet" href="./lib/semantic.min.css" />
     <title>Mock - Popup</title>
     <style>
       [v-cloak] {
         display: none;
       }
-      html, body {
+      html,
+      body {
         width: 400px;
         height: 600px;
         padding: 10px;
@@ -26,6 +27,24 @@
         width: 100%;
         height: 100%;
         overflow-y: auto;
+      }
+      main::-webkit-scrollbar {
+        width: 7px;
+        height: 0;
+      }
+      main::-webkit-scrollbar-track {
+        margin: 54px 0 53px;
+      }
+      main::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0);
+        border-radius: 10px;
+        box-shadow: rgba(255, 255, 255, 0.3) 0 0 0 1px;
+      }
+      main:hover::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.45);
+      }
+      main::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.55);
       }
       li + li {
         margin-top: 3px;
