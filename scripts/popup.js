@@ -35,8 +35,8 @@ Vue.component("StatusBar", {
   template: `
       <div>
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <div><sui-button content="Pause listening" negative icon="pause circle outline right" label-position="right" v-if="mockFlag" @click="toggleMockHandler(!mockFlag)" />
-          <sui-button content="Start listening" positive icon="right play circle outline" label-position="right" v-else @click="toggleMockHandler(!mockFlag)" /></div>
+          <div><sui-button content="Pause listening" negative icon="pause circle right" label-position="right" v-if="mockFlag" @click="toggleMockHandler(!mockFlag)" />
+          <sui-button content="Start listening" positive icon="right play circle" label-position="right" v-else @click="toggleMockHandler(!mockFlag)" /></div>
           <sui-button content="Edit or Create" icon="external alternate right" label-position="right" @click="window.open('https://mock.arcto.xyz/dashboard')" />
         </div>
         <sui-divider horizontal>Captured Request with Param</sui-divider>
