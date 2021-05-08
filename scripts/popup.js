@@ -35,11 +35,12 @@ Vue.component("StatusBar", {
   template: `
       <div>
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <div><sui-button content="Pause" negative icon="pause" label-position="left" v-if="mockFlag" @click="toggleMockHandler(!mockFlag)" />
-          <sui-button content="Start" positive icon="right arrow" label-position="right" v-else @click="toggleMockHandler(!mockFlag)" /></div>
+          <div><sui-button content="Pause listening" negative icon="pause circle outline right" label-position="right" v-if="mockFlag" @click="toggleMockHandler(!mockFlag)" />
+          <sui-button content="Start listening" positive icon="right play circle outline" label-position="right" v-else @click="toggleMockHandler(!mockFlag)" /></div>
           <sui-button content="Edit or Create" icon="external alternate right" label-position="right" @click="window.open('https://mock.arcto.xyz/dashboard')" />
         </div>
         <sui-divider horizontal>Captured Request with Param</sui-divider>
+        <sui-button content="Clear" icon="trash alternate right" label-position="right" @click="clearHistory" />
         <ul style="padding: 0">
           <mock-item v-for="item in recordList" :info="item" :key="item.id"></mock-item>
         </ul>
@@ -65,6 +66,12 @@ Vue.component("StatusBar", {
     toggleMockHandler(bool) {
       window.localStorage.setItem(window.__ext__VARS.LOCAL_STORAGE_MOCKFLAG, bool);
       this.mockFlag = bool;
+    },
+    clearHistory() {
+      allHistoryIterate(function (key, value) {
+        localStorage.removeItem(key);
+        window.location.reload();
+      })
     }
   }
 })
