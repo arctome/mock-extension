@@ -4,7 +4,7 @@ Vue.component("PrivateKeyEditor", {
       <sui-divider horizontal>Authorization</sui-divider>
       <sui-form-field>
         <label>Private Key</label>
-          <textarea rows="2" type="text" name="privatekey" placeholder="Paste your private key here." :value="privatekey"></textarea>
+          <textarea rows="2" type="text" name="privatekey" placeholder="Paste your private key here." v-model="privatekey"></textarea>
       </sui-form-field>
       <sui-button :content="saveStatus ? 'Saved!' : 'Save'" type="submit" primary :positive="saveStatus" />
     </sui-form>`,
