@@ -1,14 +1,15 @@
 Vue.component("MockItem", {
   template: `
       <li style="list-style:none;">
-        <sui-segment style="display: flex;justify-content:space-between;align-items:center;">
+        <sui-segment style="display: flex;justify-content:space-between;align-items:stretch;">
           <div>
             <p style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><strong>Mock ID: </strong>{{ info.id }}</p>
             <strong>URL: </strong>
             <p style="max-width:300px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;word-break: break-all;">{{ info.url }}</p>
           </div>
-          <div>
+          <div style="display:flex;flex-direction:column;justify-content:space-between;align-items: flex-end;margin-left:5px;">
             <sui-checkbox toggle v-model="info.enable" name="enable" @change="enableToggler" />
+            <sui-button size="mini" color="red" icon="trash alternate" inverted @click="removeItemHandler" style="opacity:.2" @mouseover="hoverHandler" @mouseleave="unhoverHandler" />
           </div>
         </sui-segment>
       </li>
@@ -24,6 +25,16 @@ Vue.component("MockItem", {
       oldRec = JSON.parse(oldRec);
       oldRec.enable = bool;
       window.localStorage.setItem(this.info.id, JSON.stringify(oldRec));
+    },
+    removeItemHandler() {
+      window.localStorage.removeItem(this.info.id);
+      window.location.reload();
+    },
+    hoverHandler(e) {
+      e.target.style.opacity=1
+    },
+    unhoverHandler(e) {
+      e.target.style.opacity=0.2
     }
   },
   mounted() {
