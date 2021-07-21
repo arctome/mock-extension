@@ -20,7 +20,7 @@ const BG_GLOBAL = {
     LOCAL_STORAGE_KEYNAME: "__ext__privatekey",
     LOCAL_STORAGE_SETTINGNAME: "__ext__settings",
     LOCAL_STORAGE_MOCKFLAG: "__ext__mockflag",
-    REMOTE_MOCK_SERVER: "https://mock.arcto.xyz/mock?mock_redirected_id="
+    REMOTE_MOCK_SERVER: "https://i.arcto.xyz/mock?mock_redirected_id="
 }
 
 // functions for request blocking
