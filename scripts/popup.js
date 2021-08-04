@@ -51,7 +51,7 @@ Vue.component("StatusBar", {
             <sui-button title="Start listening" positive icon="right play" v-else @click="toggleMockHandler(!mockFlag)" />
             <sui-button title="Clear All History" icon="trash alternate" @click="clearHistory" />
           </sui-button-group>
-          <sui-button content="Edit or Create" icon="external alternate right" label-position="right" @click="window.open('https://mock.arcto.xyz/dashboard')" />
+          <sui-button content="Edit or Create" icon="external alternate right" label-position="right" @click="window.open('https://i.arcto.xyz/admin')" />
         </div>
         <sui-divider horizontal>Captured Requests</sui-divider>
         <ul style="padding: 0">
