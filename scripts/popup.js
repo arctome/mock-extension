@@ -53,13 +53,14 @@ Vue.component("StatusBar", {
   methods: {
     toggleMockHandler(status) {
       this.mockFlag = status;
-    }
+    },
+    clearHistory() {}
   }
 })
 const App = {
   template: `<div>
     <status-bar />
-    <sui-search>
+    <sui-search style="margin-top: 10px;">
       <template v-slot:input="{ props, handlers }">
         <sui-input
           v-bind="props"
@@ -93,7 +94,7 @@ const App = {
         fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id"],
         sort: ['capture_time']
       });
-      this.records = records;
+      this.records = records.docs;
       console.log(this.records)
     },
     handleCollectionChange() { }

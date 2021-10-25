@@ -2,7 +2,7 @@
   "name": "Moker Chrome Extension",
   "version": "0.0.1",
   "description": "",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "background": {
     "page": "background.html",
     "persistent": true
