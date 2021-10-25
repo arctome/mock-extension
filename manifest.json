@@ -1,10 +1,10 @@
 {
-  "name": "Arcto's Mock",
-  "version": "0.1",
-  "description": "Arcto's Extension, which is an useful tool for Ajax api mock, without overwrite your `XMLHttpRequest`! ",
-  "manifest_version": 2,
+  "name": "Moker Chrome Extension",
+  "version": "0.0.1",
+  "description": "",
+  "manifest_version": 3,
   "background": {
-    "scripts": ["background.js"],
+    "page": "background.html",
     "persistent": true
   },
   "permissions": [

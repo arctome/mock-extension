@@ -15,3 +15,18 @@ function allHistoryIterate(fn) {
         }
     }
 }
+
+function checkEnv() {
+    if (!window.indexedDB) {
+        throw new Error("[Moker Plugin] Your browser doesn't support a stable version of IndexedDB. Plugin functions cannot run.")
+    }
+    if (!window.PouchDB) {
+        throw new Error("[Moker Plugin] PouchDB init failed.")
+    }
+}
+
+function loadConfig() {
+    const config = window.localStorage.getItem("MOKER_CONFIG");
+    if (!config) return defaultConfig;
+    return JSON.parse(config);
+}
