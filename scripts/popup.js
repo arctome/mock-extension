@@ -4,13 +4,7 @@ Vue.component("MockItem", {
         <sui-segment>
           <div style="display:flex;justify-content:space-between;">
             <p>NAME: {{ info.name }}</p>
-            <sui-dropdown text="State">
-              <sui-dropdown-menu>
-                <sui-dropdown-item>Disabled</sui-dropdown-item>
-                <sui-dropdown-item>Random States</sui-dropdown-item>
-                <sui-dropdown-divider />
-                <sui-dropdown-item v-for="k in info.cases" :key="k">{{ k }}</sui-dropdown-item>
-              </sui-dropdown-menu>
+            <sui-dropdown selection placeholder="State" v-model="current" :options="options" fluid>
             </sui-dropdown>
           </div>
           <p>URL: {{ info.url }}</p>
@@ -19,12 +13,54 @@ Vue.component("MockItem", {
     `,
   name: "MockItem",
   data() {
-    return {}
+    return {
+      current: false,
+      options: [
+        {
+          key: '__random',
+          text: 'Random Cases',
+          value: '__random',
+        },
+        {
+          key: '__disabled',
+          text: 'Disable',
+          value: 0,
+        }
+      ]
+    }
+  },
+  watch: {
+    current: function () {
+      if (this.current !== this.info.enable) {
+        this.UpdateDocFromDB(this.info._id);
+      }
+    }
   },
   props: ["info"],
   methods: {
+    UpdateDocFromDB: async function (_id) {
+      const db = new PouchDB('MOKER_POUCHDB');
+      let oldData = await db.get(_id).catch(e => { throw e })
+      if (!oldData) return false;
+      console.log(this.current)
+      const doc = {
+        ...oldData,
+        enable: this.current
+      }
+      let result = await db.put(doc).catch(e => { throw e })
+      return result;
+    }
   },
   mounted() {
+    this.info.cases.split(',').forEach(k => {
+      this.options.push({
+        key: k,
+        text: k,
+        value: k
+      })
+    })
+    this.current = this.info.enable || 0
+    console.log(this.info, this.current)
   }
 })
 Vue.component("StatusBar", {
@@ -48,28 +84,25 @@ Vue.component("StatusBar", {
   mounted() {
     const config = loadConfig();
     if (config.enable) this.mockFlag = true;
-    if (config.server) this.adminPanel = config.server.replace('/api/mock', '/admin')
+    if (config.server) this.adminPanel = config.server + '/admin'
   },
   methods: {
     toggleMockHandler(status) {
       this.mockFlag = status;
+      updateConfig({ enable: this.mockFlag });
     },
-    clearHistory() {}
+    clearHistory() { }
   }
 })
 const App = {
   template: `<div>
     <status-bar />
-    <sui-search style="margin-top: 10px;">
-      <template v-slot:input="{ props, handlers }">
-        <sui-input
-          v-bind="props"
-          v-on="handlers"
-          placeholder="Search collections ..."
-          icon="search"
-        />
-      </template>
-    </sui-search>
+    <sui-input
+      placeholder="Search collections ..."
+      icon="search"
+      style="margin-top:10px;"
+      @change="changeHandler"
+    />
     <sui-divider horizontal>Captured Requests</sui-divider>
     <ul style="padding: 0">
       <mock-item v-for="item in records" :info="item" :key="item.id"></mock-item>
@@ -82,26 +115,39 @@ const App = {
     };
   },
   methods: {
-    loadRecords(collection) {
+    async loadRecords(collection) {
       const db = new PouchDB("MOKER_POUCHDB");
-      await db.createIndex({
-        index: { fields: ['capture_time'] }
+      let selector = { capture_time: { $gt: null } }
+      if (collection) selector.collections = { $elemMatch: collection }
+      // await db.createIndex({
+      //   index: { fields: ['collections', 'capture_time'] },
+      //   name: "collection_list"
+      // }).catch(e => { throw e })
+      // let records = await db.find({
+      //   selector,
+      //   fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id", "enable", "capture_time"],
+      //   sort: ['capture_time']
+      // }).catch(e => { throw e });
+
+      let records = await db.createIndex({
+        index: { fields: ['collections', 'capture_time'] }
+      }).then(function () {
+        return db.find({
+          selector,
+          fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id", "enable", "capture_time"],
+          sort: ['capture_time']
+        })
       })
-      let selector = {}
-      if (collection) selector.collection = { $regex: `.*${collection}.*` }
-      let records = await db.find({
-        selector,
-        fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id"],
-        sort: ['capture_time']
-      });
       this.records = records.docs;
-      console.log(this.records)
     },
-    handleCollectionChange() { }
+    changeHandler(e) {
+      let collection = e.target.value;
+      this.loadRecords(collection).catch(e => { console.log(e) })
+    }
   },
   mounted() {
     checkEnv();
-    loadRecords();
+    this.loadRecords().catch(e => { console.log(e) });
   }
 };
 Vue.config.productionTip = false;

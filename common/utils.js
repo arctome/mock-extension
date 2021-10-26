@@ -26,7 +26,7 @@ function checkEnv() {
 }
 
 const defaultConfig = {
-    server: "https://moker-server.arctos.workers.dev/api/mock",
+    server: "http://localhost:10081",
     block_mock_key: "mock_id",
     // block_case_key: "case_id",
     enable: false,
@@ -38,4 +38,14 @@ function loadConfig() {
     const config = window.localStorage.getItem("MOKER_CONFIG");
     if (!config) return defaultConfig;
     return JSON.parse(config);
+}
+function updateConfig(configPatch) {
+    let config = window.localStorage.getItem("MOKER_CONFIG");
+    if(config) {
+        config = JSON.parse(config)
+    } else {
+        config = defaultConfig;
+    }
+    window.localStorage.setItem("MOKER_CONFIG", JSON.stringify(Object.assign(config, configPatch)))
+    return true;
 }
