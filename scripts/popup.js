@@ -42,12 +42,12 @@ Vue.component("MockItem", {
       const db = new PouchDB('MOKER_POUCHDB');
       let oldData = await db.get(_id).catch(e => { throw e })
       if (!oldData) return false;
-      console.log(this.current)
       const doc = {
         ...oldData,
         enable: this.current
       }
       let result = await db.put(doc).catch(e => { throw e })
+      window.localStorage.setItem("MOKER_ID:" + _id, JSON.stringify(doc));
       return result;
     }
   },
@@ -60,7 +60,6 @@ Vue.component("MockItem", {
       })
     })
     this.current = this.info.enable || 0
-    console.log(this.info, this.current)
   }
 })
 Vue.component("StatusBar", {
@@ -117,27 +116,26 @@ const App = {
   methods: {
     async loadRecords(collection) {
       const db = new PouchDB("MOKER_POUCHDB");
-      let selector = { capture_time: { $gt: null } }
-      if (collection) selector.collections = { $elemMatch: collection }
-      // await db.createIndex({
-      //   index: { fields: ['collections', 'capture_time'] },
-      //   name: "collection_list"
-      // }).catch(e => { throw e })
-      // let records = await db.find({
-      //   selector,
-      //   fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id", "enable", "capture_time"],
-      //   sort: ['capture_time']
-      // }).catch(e => { throw e });
-
-      let records = await db.createIndex({
-        index: { fields: ['collections', 'capture_time'] }
-      }).then(function () {
-        return db.find({
-          selector,
-          fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id", "enable", "capture_time"],
-          sort: ['capture_time']
-        })
+      let selector = {}
+      if (collection) {
+        selector.capture_time = { $gt: null }
+        selector.collections = { $elemMatch: collection }
+      }
+      await db.createIndex({
+        index: { fields: ["capture_time", 'collections'] },
+        name: "collection_list"
+      }).catch(e => {
+        console.log(e)
+        throw e;
       })
+      let records = await db.find({
+        selector,
+        fields: ['_id', 'name', 'url', 'collections', 'cases', "c_time", "owner_id", "enable", "capture_time"],
+        sort: ['capture_time']
+      }).catch(e => {
+        console.log(e)
+        throw e;
+      });
       this.records = records.docs;
     },
     changeHandler(e) {
@@ -147,7 +145,7 @@ const App = {
   },
   mounted() {
     checkEnv();
-    this.loadRecords().catch(e => { console.log(e) });
+    this.loadRecords().catch(e => { console.log("loadRecord Error") });
   }
 };
 Vue.config.productionTip = false;
