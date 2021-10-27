@@ -188,6 +188,13 @@ function requestHandler(info) {
     let doc = window.localStorage.getItem("MOKER_ID:" + mockId);
     if (!doc) return {}
     doc = JSON.parse(doc);
+    if (!doc.enable) return {}
+    if (doc.enable === "__random") {
+        let cases = docs.cases.split(",");
+        return {
+            redirectUrl: config.server + '/api/mock' + `?__internal_record_id__=${mockId}&__internal_case_id__=${cases[Math.floor(Math.random()*cases.length)]}`
+        }
+    }
     return {
         redirectUrl: config.server + '/api/mock' + `?__internal_record_id__=${mockId}&__internal_case_id__=${doc.enable}`
     }

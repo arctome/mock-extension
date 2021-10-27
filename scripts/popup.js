@@ -2,12 +2,18 @@ Vue.component("MockItem", {
   template: `
       <li style="list-style:none;">
         <sui-segment>
-          <div style="display:flex;justify-content:space-between;">
-            <p>NAME: {{ info.name }}</p>
-            <sui-dropdown selection placeholder="State" v-model="current" :options="options" fluid>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Name: {{ info.name }}</span>
+            <sui-dropdown selection placeholder="State" v-model="current" :options="options" style="width:40%" fluid>
             </sui-dropdown>
           </div>
-          <p>URL: {{ info.url }}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+            <span>URL: {{ info.url }}</span>
+            <div>
+              <sui-button icon="refresh" @click="refreshRecord" />
+              <sui-button icon="remove" @click="removeRecord" />
+            </div>
+          </div>
         </sui-segment>
       </li>
     `,
@@ -49,7 +55,9 @@ Vue.component("MockItem", {
       let result = await db.put(doc).catch(e => { throw e })
       window.localStorage.setItem("MOKER_ID:" + _id, JSON.stringify(doc));
       return result;
-    }
+    },
+    removeRecord: function () { },
+    refreshRecord: function () { }
   },
   mounted() {
     this.info.cases.split(',').forEach(k => {
