@@ -105,10 +105,12 @@ const App = {
   template: `<div>
     <status-bar />
     <sui-input
+      fluid
       placeholder="Search collections ..."
       icon="search"
       style="margin-top:10px;"
-      @change="changeHandler"
+      v-model="search_name"
+      v-on:keydown.enter.prevent="searchHandler"
     />
     <sui-divider horizontal>Captured Requests</sui-divider>
     <ul style="padding: 0">
@@ -118,7 +120,8 @@ const App = {
   name: "App",
   data() {
     return {
-      records: null
+      records: null,
+      search_name: ""
     };
   },
   methods: {
@@ -146,9 +149,8 @@ const App = {
       });
       this.records = records.docs;
     },
-    changeHandler(e) {
-      let collection = e.target.value;
-      this.loadRecords(collection).catch(e => { console.log(e) })
+    searchHandler() {
+      this.loadRecords(this.search_name).catch(e => { console.log(e) })
     }
   },
   mounted() {
